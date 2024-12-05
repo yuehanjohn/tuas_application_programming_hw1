@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Board Games</title>
+</head>
+<body>
+    <h1>Available Board Games</h1>
+    <ul>
+        {% for game in games %}
+            <li>{{ game.title }} - {{ game.description }}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'borrow_game' game.id %}">Borrow</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <h2>Borrowed Games</h2>
+        <ul>
+            {% for loan in borrowed_games %}
+                <li>{{ loan.game.title }} - {{ loan.game.description }}
+                    <a href="{% url 'return_game' loan.id %}">Return</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'add_game' %}">Add Game</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+</body>
+</html>
